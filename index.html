@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grand Stay – Hotel Management System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <h1 class="logo">🏨 Grand Stay</h1>
+    <nav>
+      <button class="nav-btn active" data-page="dashboard">📊 Dashboard</button>
+      <button class="nav-btn" data-page="rooms">🛏️ Rooms</button>
+      <button class="nav-btn" data-page="bookings">📅 Bookings</button>
+      <button class="nav-btn" data-page="guests">👥 Guests</button>
+      <button class="nav-btn" data-page="billing">🧾 Billing</button>
+    </nav>
+    <button id="resetBtn" class="btn btn-ghost reset">Reset Demo Data</button>
+  </aside>
+
+  <main class="content">
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="page active">
+      <h2>Dashboard</h2>
+      <div class="cards" id="statCards"></div>
+      <div class="panel">
+        <h3>Today's Activity</h3>
+        <table>
+          <thead><tr><th>Guest</th><th>Room</th><th>Check-in</th><th>Check-out</th><th>Status</th></tr></thead>
+          <tbody id="todayTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ROOMS -->
+    <section id="rooms" class="page">
+      <div class="page-head">
+        <h2>Rooms</h2>
+        <select id="roomFilter">
+          <option value="all">All</option>
+          <option value="available">Available</option>
+          <option value="occupied">Occupied</option>
+          <option value="maintenance">Maintenance</option>
+        </select>
+      </div>
+      <form id="roomForm" class="panel form-row">
+        <input type="text" id="roomNumber" placeholder="Room No." required>
+        <select id="roomType">
+          <option>Single</option><option>Double</option><option>Deluxe</option><option>Suite</option>
+        </select>
+        <input type="number" id="roomPrice" placeholder="Price / night (₹)" min="1" required>
+        <button class="btn" type="submit">Add Room</button>
+      </form>
+      <div class="room-grid" id="roomGrid"></div>
+    </section>
+
+    <!-- BOOKINGS -->
+    <section id="bookings" class="page">
+      <h2>Bookings</h2>
+      <form id="bookingForm" class="panel form-grid">
+        <input type="text" id="guestName" placeholder="Guest name" required>
+        <input type="tel" id="guestPhone" placeholder="Phone" pattern="[0-9+ -]{7,15}" required>
+        <label>Check-in <input type="date" id="checkIn" required></label>
+        <label>Check-out <input type="date" id="checkOut" required></label>
+        <select id="bookingRoom" required></select>
+        <div id="priceHint" class="hint">Select dates and room to see total.</div>
+        <button class="btn" type="submit">Create Booking</button>
+      </form>
+      <div class="panel">
+        <table>
+          <thead><tr><th>#</th><th>Guest</th><th>Room</th><th>Dates</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="bookingTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- GUESTS -->
+    <section id="guests" class="page">
+      <div class="page-head">
+        <h2>Guests</h2>
+        <input type="search" id="guestSearch" placeholder="Search guests...">
+      </div>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Name</th><th>Phone</th><th>Stays</th><th>Total Spent</th></tr></thead>
+          <tbody id="guestTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- BILLING -->
+    <section id="billing" class="page">
+      <h2>Billing</h2>
+      <div class="panel">
+        <label>Select booking
+          <select id="billSelect"></select>
+        </label>
+      </div>
+      <div class="panel invoice" id="invoice">Select a booking to generate an invoice.</div>
+      <button class="btn" id="printBtn">🖨️ Print Invoice</button>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <script src="script.js"></script>
+</body>
+</html>
