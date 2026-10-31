@@ -14,7 +14,11 @@
       <button class="nav-btn" data-page="rooms">🛏️ Rooms</button>
       <button class="nav-btn" data-page="bookings">📅 Bookings</button>
       <button class="nav-btn" data-page="guests">👥 Guests</button>
+      <button class="nav-btn" data-page="services">🍽️ Services</button>
+      <button class="nav-btn" data-page="housekeeping">🧹 Housekeeping</button>
+      <button class="nav-btn" data-page="staff">🧑‍💼 Staff</button>
       <button class="nav-btn" data-page="billing">🧾 Billing</button>
+      <button class="nav-btn" data-page="reports">📈 Reports</button>
     </nav>
     <button id="resetBtn" class="btn btn-ghost reset">Reset Demo Data</button>
   </aside>
@@ -31,6 +35,10 @@
           <tbody id="todayTable"></tbody>
         </table>
       </div>
+      <div class="panel">
+        <h3>Staff On Duty Today</h3>
+        <div id="dutyList" class="chips"></div>
+      </div>
     </section>
 
     <!-- ROOMS -->
@@ -41,6 +49,7 @@
           <option value="all">All</option>
           <option value="available">Available</option>
           <option value="occupied">Occupied</option>
+          <option value="cleaning">Cleaning</option>
           <option value="maintenance">Maintenance</option>
         </select>
       </div>
@@ -60,7 +69,7 @@
       <h2>Bookings</h2>
       <form id="bookingForm" class="panel form-grid">
         <input type="text" id="guestName" placeholder="Guest name" required>
-        <input type="tel" id="guestPhone" placeholder="Phone" pattern="[0-9+ -]{7,15}" required>
+        <input type="tel" id="guestPhone" placeholder="Phone" pattern="[0-9+ \-]{7,15}" required>
         <label>Check-in <input type="date" id="checkIn" required></label>
         <label>Check-out <input type="date" id="checkOut" required></label>
         <select id="bookingRoom" required></select>
@@ -89,6 +98,96 @@
       </div>
     </section>
 
+    <!-- SERVICES -->
+    <section id="services" class="page">
+      <h2>Guest Services &amp; Extra Charges</h2>
+      <p class="note">Add restaurant, laundry, spa and other charges to a checked-in guest. They appear on the final invoice.</p>
+      <form id="serviceForm" class="panel form-grid">
+        <label>Guest (checked-in)
+          <select id="svcBooking" required></select>
+        </label>
+        <label>Category
+          <select id="svcCategory"></select>
+        </label>
+        <label>Description
+          <input type="text" id="svcDesc" placeholder="e.g. Dinner for two">
+        </label>
+        <label>Quantity
+          <input type="number" id="svcQty" value="1" min="1" required>
+        </label>
+        <label>Unit price (₹)
+          <input type="number" id="svcPrice" min="0" required>
+        </label>
+        <button class="btn" type="submit">Add Charge</button>
+      </form>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Date</th><th>Guest</th><th>Room</th><th>Category</th><th>Description</th><th>Qty</th><th>Amount</th><th></th></tr></thead>
+          <tbody id="serviceTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- HOUSEKEEPING -->
+    <section id="housekeeping" class="page">
+      <div class="page-head">
+        <h2>Housekeeping</h2>
+        <select id="hkFilter">
+          <option value="all">All tasks</option>
+          <option value="pending">Pending</option>
+          <option value="in-progress">In progress</option>
+          <option value="done">Done</option>
+        </select>
+      </div>
+      <p class="note">A cleaning task is created automatically at check-out. Marking it done frees the room.</p>
+      <form id="hkForm" class="panel form-grid">
+        <label>Room <select id="hkRoom" required></select></label>
+        <label>Task <select id="hkType"></select></label>
+        <label>Assign to <select id="hkStaff"></select></label>
+        <label>Notes <input type="text" id="hkNotes" placeholder="Optional"></label>
+        <button class="btn" type="submit">Add Task</button>
+      </form>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Room</th><th>Task</th><th>Assigned to</th><th>Notes</th><th>Created</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="hkTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- STAFF -->
+    <section id="staff" class="page">
+      <div class="page-head">
+        <h2>Staff</h2>
+        <div class="form-row tight">
+          <select id="staffRoleFilter"></select>
+          <input type="search" id="staffSearch" placeholder="Search staff...">
+        </div>
+      </div>
+      <form id="staffForm" class="panel form-grid">
+        <input type="hidden" id="staffId">
+        <label>Full name <input type="text" id="staffName" required></label>
+        <label>Role <select id="staffRole" required></select></label>
+        <label>Shift <select id="staffShift"></select></label>
+        <label>Phone <input type="tel" id="staffPhone" pattern="[0-9+ \-]{7,15}" required></label>
+        <label>Email <input type="email" id="staffEmail"></label>
+        <label>Monthly salary (₹) <input type="number" id="staffSalary" min="0" required></label>
+        <label>Joining date <input type="date" id="staffJoin" required></label>
+        <div class="btn-group">
+          <button class="btn" type="submit" id="staffSubmit">Add Staff</button>
+          <button class="btn btn-ghost-dark" type="button" id="staffCancel" hidden>Cancel</button>
+        </div>
+      </form>
+      <div class="panel">
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Role</th><th>Shift</th><th>Contact</th><th>Salary</th><th>Today</th><th>Present (month)</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="staffTable"></tbody>
+        </table>
+      </div>
+    </section>
+
     <!-- BILLING -->
     <section id="billing" class="page">
       <h2>Billing</h2>
@@ -99,6 +198,48 @@
       </div>
       <div class="panel invoice" id="invoice">Select a booking to generate an invoice.</div>
       <button class="btn" id="printBtn">🖨️ Print Invoice</button>
+    </section>
+
+    <!-- REPORTS -->
+    <section id="reports" class="page">
+      <div class="page-head">
+        <h2>Reports &amp; Finance</h2>
+        <label class="inline-label">Month <input type="month" id="reportMonth"></label>
+      </div>
+      <div class="cards" id="reportCards"></div>
+
+      <div class="panel">
+        <h3>Payroll</h3>
+        <p class="note">Net pay = salary − (salary ÷ 30 × absent days marked this month).</p>
+        <table>
+          <thead><tr><th>Staff</th><th>Role</th><th>Salary</th><th>Present</th><th>Absent</th><th>Leave</th><th>Deduction</th><th>Net pay</th></tr></thead>
+          <tbody id="payrollTable"></tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h3>Expenses</h3>
+        <form id="expenseForm" class="form-grid">
+          <label>Date <input type="date" id="expDate" required></label>
+          <label>Category <select id="expCategory"></select></label>
+          <label>Description <input type="text" id="expDesc" placeholder="e.g. Electricity bill" required></label>
+          <label>Amount (₹) <input type="number" id="expAmount" min="1" required></label>
+          <button class="btn" type="submit">Add Expense</button>
+        </form>
+        <table class="mt">
+          <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th></th></tr></thead>
+          <tbody id="expenseTable"></tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h3>Export Data (CSV)</h3>
+        <div class="btn-group">
+          <button class="btn" id="exportBookings">Bookings</button>
+          <button class="btn" id="exportStaff">Staff</button>
+          <button class="btn" id="exportExpenses">Expenses</button>
+        </div>
+      </div>
     </section>
   </main>
 
